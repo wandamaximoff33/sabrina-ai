@@ -27,15 +27,17 @@ export default async function handler(req: Request) {
   headers: {
     Authorization: `Bearer ${process.env.FISH_AUDIO_API_KEY}`,
     "Content-Type": "application/json",
-    Accept: "audio/mpeg",
   },
   body: JSON.stringify({
     text,
     voice_id: "5c37ce7913ac4d138e733f6def46deeb",
     model: "speech-1",
-    format: "mp3",
+    response_format: "mp3"
   }),
 });
+  
+console.log("Fish status:", response.status);
+console.log("Fish content-type:", response.headers.get("content-type"));
 
   if (!response.ok) {
     const errorText = await response.text();
