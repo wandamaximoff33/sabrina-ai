@@ -1,16 +1,25 @@
-export default async function handler(req: any, res: any) {
+export default async function handler(req: Request) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return new Response(
+      JSON.stringify({ error: "Method not allowed" }),
+      { status: 405 }
+    );
   }
 
-  const { text } = req.body;
+  const { text } = await req.json();
 
   if (!text) {
-    return res.status(400).json({ error: "Missing text" });
+    return new Response(
+      JSON.stringify({ error: "Missing text" }),
+      { status: 400 }
+    );
   }
 
   if (!process.env.FISH_AUDIO_API_KEY) {
-    return res.status(500).json({ error: "Missing Fish Audio API key" });
+    return new Response(
+      JSON.stringify({ error: "Missing Fish Audio API key" }),
+      { status: 500 }
+    );
   }
 
   const response = await fetch("https://api.fish.audio/v1/tts", {
@@ -29,15 +38,18 @@ export default async function handler(req: any, res: any) {
 
   if (!response.ok) {
     const errorText = await response.text();
-    return res.status(500).json({
-      error: "Fish Audio failed",
-      details: errorText,
-    });
+    return new Response(
+      JSON.stringify({
+        error: "Fish Audio failed",
+        details: errorText,
+      }),
+      { status: 500 }
+    );
   }
 
-  const arrayBuffer = await response.arrayBuffer();
-  const audioBuffer = Buffer.from(arrayBuffer);
-
-  res.setHeader("Content-Type", "audio/mpeg");
-  res.send(audioBuffer);
+  return new Response(await response.arrayBuffer(), {
+    headers: {
+      "Content-Type": "audio/mpeg",
+    },
+  });
 }
