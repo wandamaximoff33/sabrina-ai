@@ -1,0 +1,7 @@
+{
+  "name": "Short n' Sweet Chat",
+  "description": "A sassy, sweet, and confident AI companion inspired by modern pop-star aesthetics. Chat, get advice, and edit your photos with a playful diva flair.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
