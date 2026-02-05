@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage, MessageType } from '../types';
 import { chatWithPro, searchGrounding } from '../services/geminiService';
+import { speak } from '../services/tts';
 import { ICONS } from '../constants';
 
 interface ChatWindowProps {
@@ -67,6 +68,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onSuggestEdit }) => {
       };
 
       setMessages(prev => [...prev, assistantMsg]);
+      speak(assistantMsg.content);
     } catch (error) {
       console.error(error);
       const errorMsg: ChatMessage = {
