@@ -24,6 +24,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onSuggestEdit }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+  // Force browser to preload voices (VERY IMPORTANT)
+  window.speechSynthesis.getVoices();
+}, []);
+  
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
