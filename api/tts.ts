@@ -22,19 +22,20 @@ export default async function handler(req: Request) {
     );
   }
 
-  const response = await fetch("https://api.fish.audio/v1/tts", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.FISH_AUDIO_API_KEY}`,
-      "Content-Type": "application/json",
-      Accept: "audio/mpeg",
-    },
-    body: JSON.stringify({
-      text,
-      voice_id: "5c37ce7913ac4d138e733f6def46deeb",
-      format: "mp3",
-    }),
-  });
+ const response = await fetch("https://api.fish.audio/v1/tts", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.FISH_AUDIO_API_KEY}`,
+    "Content-Type": "application/json",
+    Accept: "audio/mpeg",
+  },
+  body: JSON.stringify({
+    text,
+    voice_id: "5c37ce7913ac4d138e733f6def46deeb",
+    model: "speech-1",
+    format: "mp3",
+  }),
+});
 
   if (!response.ok) {
     const errorText = await response.text();
