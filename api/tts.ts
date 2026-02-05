@@ -1,11 +1,10 @@
-export const runtime = "nodejs";
-
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
-    return res.status(405).end();
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   const { text } = req.body;
+
   if (!text) {
     return res.status(400).json({ error: "Missing text" });
   }
@@ -15,6 +14,7 @@ export default async function handler(req: any, res: any) {
     headers: {
       Authorization: `Bearer ${process.env.FISH_AUDIO_API_KEY}`,
       "Content-Type": "application/json",
+      Accept: "audio/mpeg",
     },
     body: JSON.stringify({
       text,
@@ -23,7 +23,12 @@ export default async function handler(req: any, res: any) {
     }),
   });
 
-  const buffer = await response.arrayBuffer();
-  res.setHeader("Content-Type", "audio/mpeg");
-  res.send(Buffer.from(buffer));
-}
+  if (!response.ok) {
+    const errorText = await response.text();
+    return res.status(500).json({
+      error: "Fish Audio failed",
+      details: errorText,
+    });
+  }
+
+  const audioBuffer = Buffer.from(a
