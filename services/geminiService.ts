@@ -2,7 +2,10 @@
 import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { PERSONA_PROMPT } from "../constants";
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+const getAI = () =>
+  new GoogleGenAI({
+    apiKey: import.meta.env.VITE_GEMINI_API_KEY || "",
+  });
 
 export const chatWithPro = async (message: string, history: { role: string; parts: string }[]) => {
   const ai = getAI();
