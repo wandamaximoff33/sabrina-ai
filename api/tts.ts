@@ -48,8 +48,10 @@ export default async function handler(req: Request) {
   }
 
   return new Response(await response.arrayBuffer(), {
-    headers: {
-      "Content-Type": "audio/mpeg",
-    },
-  });
+  headers: {
+    "Content-Type": "audio/mpeg",
+    "Cache-Control": "no-store",
+  },
+});
+
 }
